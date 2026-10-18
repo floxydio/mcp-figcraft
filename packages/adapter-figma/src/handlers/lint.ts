@@ -20,6 +20,7 @@ import { hexToFigmaRgb } from '../utils/color.js';
 import { getAvailableLibraryCollectionsCached } from '../utils/design-context.js';
 import type { DeferredStrategyHandler } from '../utils/fix-applicator.js';
 import { applyFixDescriptor, builtInDeferredStrategies } from '../utils/fix-applicator.js';
+import { collectLocalComponentNames } from '../utils/local-component-names.js';
 import { findNodeByIdAsync } from '../utils/node-lookup.js';
 import {
   ensureLoaded,
@@ -86,6 +87,7 @@ export function registerLintHandlers(): void {
       mode: currentMode,
       selectedLibrary: currentLibrary || null,
       lang: currentLang,
+      availableComponents: collectLocalComponentNames(),
     };
 
     // Populate libraryStyleIds for foreign-style rule (library mode only)

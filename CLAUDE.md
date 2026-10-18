@@ -370,6 +370,17 @@ Troubleshooting:
 | `nodes(method:"update")` colors ignored | Use `fills` / `strokes` with `{ type: "SOLID", color: { r, g, b } }` (values 0–1), not hex strings |
 | Plugin-side orphaned-tool warnings in the MCP server log | Harmless — those are internal bridge handler names, exposed to the IDE through the `nodes` / `text` / `components` / `variables_ep` / `styles_ep` endpoints |
 
+### Prototype Standards
+
+Load with `load_toolset("prototype")`. Standard screen-to-screen navigation (e.g. Login button → dashboard):
+
+- Trigger `ON_CLICK`, action `NODE` + `NAVIGATE`, transition `DISSOLVE`, **0.3 s**, easing `EASE_OUT`
+- `duration` in the Plugin API is in **seconds**, not milliseconds — `0.3` = 300 ms. Passing `300` creates a 300-second transition (Figma shows it as 300000 ms)
+- `easing` is mandatory on transitions; a transition without it fails validation
+- `connect_screens` takes `duration` in ms and converts to seconds, with `EASE_OUT` as default; `add_reaction` / `set_reactions` pass values straight to the Plugin API, so give seconds and an explicit `easing`
+- Verify with `get_reactions` (duration should read `0.3`) and `analyze_prototype_flow` (no unexpected dead ends)
+- `add_reaction` appends; use `set_reactions` to replace an existing reaction
+
 ### User Usage (after npm package published)
 
 ```bash

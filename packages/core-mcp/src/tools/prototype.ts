@@ -108,7 +108,9 @@ function buildFlowGraph(reactionNodes: ReactionNode[], nodeNameMap: Map<string, 
             to: { nodeId: act.destinationId, nodeName: destName },
             trigger,
             action: actionType,
-            transition: act.transition ? `${act.transition.type} ${act.transition.duration}ms` : undefined,
+            transition: act.transition
+              ? `${act.transition.type} ${Math.round(act.transition.duration * 1000)}ms`
+              : undefined,
             delay: reaction.trigger?.delay,
           });
 
@@ -441,13 +443,15 @@ export function registerPrototypeTools(server: McpServer, bridge: Bridge): void 
             type: 'NODE' as const,
             destinationId: conn.destinationNodeId,
             navigation: conn.navigation,
+            // Figma Plugin API takes duration in SECONDS and requires an easing.
             transition: conn.transition
               ? {
                   type: conn.transition.type,
-                  duration: conn.transition.duration,
+                  duration: conn.transition.duration / 1000,
+                  easing: { type: 'EASE_OUT' },
                   ...(conn.transition.direction ? { direction: conn.transition.direction } : {}),
                 }
-              : { type: 'DISSOLVE', duration: 300 },
+              : { type: 'DISSOLVE', duration: 0.3, easing: { type: 'EASE_OUT' } },
           },
         ],
       }));

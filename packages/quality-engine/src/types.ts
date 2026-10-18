@@ -166,6 +166,11 @@ export interface LintContext {
    * When empty/undefined, foreign-variable rule is skipped.
    */
   libraryVariableIds?: Set<string>;
+  /**
+   * Names of components (local, and library when known) that can be instantiated.
+   * Used by prefer-component-instance; when empty/undefined the rule is skipped.
+   */
+  availableComponents?: string[];
 }
 
 /**

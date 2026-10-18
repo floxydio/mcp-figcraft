@@ -12,6 +12,7 @@ import { PLUGIN_DATA_KEYS } from '../constants.js';
 import { registerCache } from '../utils/cache-manager.js';
 import { figmaRgbaToHex } from '../utils/color.js';
 import { applyFixDescriptor, builtInDeferredStrategies } from '../utils/fix-applicator.js';
+import { collectLocalComponentNames } from '../utils/local-component-names.js';
 import {
   ensureLoaded,
   getLibraryStyleIdSet,
@@ -288,6 +289,7 @@ export async function buildLintContextFromStorage(): Promise<LintContext> {
     mode: currentMode,
     selectedLibrary: currentLibrary || null,
     lang: currentLang,
+    availableComponents: collectLocalComponentNames(),
   };
 
   // Populate libraryStyleIds for foreign-style rule (library mode only)

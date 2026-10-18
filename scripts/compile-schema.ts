@@ -14,6 +14,7 @@
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parse as parseYaml } from 'yaml';
 
 // ─── Types ───
@@ -74,7 +75,7 @@ interface Schema {
 
 // ─── YAML Loading ───
 
-const ROOT = resolve(dirname(new URL(import.meta.url).pathname), '..');
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SCHEMA_PATH = resolve(ROOT, 'schema/tools.yaml');
 const GENERATED_TARGETS = [
   {

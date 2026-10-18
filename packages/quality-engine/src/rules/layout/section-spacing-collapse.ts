@@ -16,6 +16,8 @@ const CHILD_SELF_PAD_THRESHOLD = 8;
 
 /** Does this single node carry a direct "self-contained" visual signal? */
 function hasOwnRhythmSignal(node: AbstractNode): boolean {
+  // A TEXT node's fill is its glyph color, not a background — it never separates sections.
+  if (node.type === 'TEXT') return false;
   const verticalPad = (node.paddingTop ?? 0) + (node.paddingBottom ?? 0);
   if (verticalPad >= CHILD_SELF_PAD_THRESHOLD) return true;
 

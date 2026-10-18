@@ -1077,7 +1077,7 @@ export function registerGeneratedTools(
             direction: z.string().optional(),
           }).optional(),
           overlay: z.record(z.unknown()).optional(),
-        })).optional().describe("Action definitions (single mode). Each action: type (NODE|BACK|CLOSE|URL), destinationId, navigation (NAVIGATE|SWAP|OVERLAY|SCROLL_TO|CHANGE_TO), transition ({type, duration, easing, direction}), url (for URL type)."),
+        })).optional().describe("Action definitions (single mode). Each action: type (NODE|BACK|CLOSE|URL), destinationId, navigation (NAVIGATE|SWAP|OVERLAY|SCROLL_TO|CHANGE_TO), transition ({type, duration, easing, direction}), url (for URL type). Transition standard: duration is in SECONDS (Figma Plugin API) — use 0.3 for 300ms, never 300 (that is 300 seconds). easing is required (default {type:\"EASE_OUT\"}). Standard screen navigation: ON_CLICK + NAVIGATE + DISSOLVE 0.3s + EASE_OUT."),
       items: z.array(z.object({
           nodeId: z.string(),
           trigger: z.record(z.unknown()),

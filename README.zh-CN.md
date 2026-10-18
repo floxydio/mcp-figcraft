@@ -21,11 +21,21 @@ AI 驱动的 Figma 设计质量插件。让 AI IDE 与 Figma 双向联动——�
 - 🎨 **从创建到交付，全程覆盖** — 直接在 Figma 中创建 UI，116 个 MCP 工具覆盖 Frame、组件、变体、图标。画完即检查，质量问题当场修
 - 🧠 **Opinion Engine 智能推断** — 自动推断布局方向、尺寸策略、Token 绑定，在参数冲突到达 Figma 前就拦截。你描述*要什么*，它搞定*怎么做*
 - 🔍 **设计规范自动审查** — Token 绑定、颜色对比度、间距规范、组件健康度，一次扫描全覆盖 · [完整指南 →](docs/design-review.md)
-- 🔧 **检查+修复一步到位** — 40 条规则覆盖 Token 合规、WCAG、布局结构，一条命令批量自动修复
+- 🔧 **检查+修复一步到位** — 44 条规则覆盖 Token 合规、WCAG、布局结构，一条命令批量自动修复
 - 🔄 **Token 双向同步** — DTCG JSON ↔ Figma 变量，Light/Dark 多模式一步到位。改了代码里的 Token？同步过去就行
 - 🔀 **双模式适配团队** — 用 Figma 共享库的团队选 Library 模式，用 DTCG JSON 管理规范的团队选 Spec 模式
 - 📐 **原型交互→开发文档** — 自动解析页面里的原型跳转，输出 Mermaid 流程图 + 交互说明，设计师不用再手写交互文档
 - 🛡️ **Harness Pipeline 行为约束** — 每次创建自动验证质量，出错时给出可执行的修复建议，跨 turn 追踪质量债务
+
+## 最新更新
+
+- 🧩 **优先使用组件实例** — 新增 `prefer-component-instance` 规则，标记与已有组件同名的手工搭建 Frame(目前仅匹配当前页的本地组件,暂不匹配 Library 组件)
+- 📱 **Web/平板响应式检查** — 新增 `web-responsive-missing` 规则(支持自动修复为 Fill container),标记桌面/平板屏幕上被固定宽度锁死的整宽区块
+- 🐛 **间距检查更准确** — `section-spacing-collapse` 不再把文字颜色当作背景,真正塌缩的区块现在能被检出
+- 🧪 **质量基准大幅扩充** — 31 → 300+ 个测试:平板、Web、Android、暗色模式、表单、空状态、浮层,以及保护规则召回率的"必须触发"反例场景。基准现以 `verbose` 级别运行,命名/空容器/嵌套深度等规则真正参与评估
+- 🌐 **HTML 导入** — `import_html` 将静态 HTML、本地 `.html` 文件或简单 URL 转为可编辑图层
+- 🖼️ **本地图片导入** — `create_image_frame_from_local` / `fill_existing_image_from_local`
+- 📡 **多端口 Relay 发现** — `ping` 可在 3055-3060 端口范围内自动发现插件
 
 ## 快速开始
 
@@ -212,15 +222,15 @@ FigCraft 直接在 Figma 中创建 UI — Frame、文本、SVG、组件、变体
 - 创建后 Harness Pipeline 自动验证质量；也可手动运行 `lint_fix_all`
 - `get_design_context` 提取节点树 + 已解析的 Token 元数据，用于 design-to-code 工作流
 
-## 检查规则（40 条）
+## 检查规则（44 条）
 
 当前规则集覆盖 Token 合规、WCAG 无障碍、布局结构、命名与内容、组件健康度。
 
-- Token 合规（5）：颜色、字体、圆角、硬编码 token、缺失文字样式
+- Token 合规（7）：颜色、字体、圆角、硬编码 token、缺失文字样式、外部样式、外部变量
 - WCAG 无障碍（5）：对比度、点击区域、字号、行高、非文本对比度
-- 布局结构（27）：screen shell 校验、交互元素根节点误分类、嵌套交互 shell、缺失 auto-layout、空容器、Spacer frame、嵌套深度、按钮结构（solid/outline/ghost/text/icon）、独立链接结构、文本溢出、表单一致性、CTA 宽度不一致、子元素溢出父容器、HUG/STRETCH 矛盾、section spacing 塌缩、屏幕底部溢出、social/nav/stats 行拥挤、输入框结构、移动端尺寸、elevation 一致性/层级
+- 布局结构（28）：screen shell 校验、交互元素根节点误分类、嵌套交互 shell、缺失 auto-layout、空容器、Spacer frame、嵌套深度、按钮结构（solid/outline/ghost/text/icon）、独立链接结构、文本溢出、表单一致性、CTA 宽度不一致、子元素溢出父容器、HUG/STRETCH 矛盾、section spacing 塌缩、屏幕底部溢出、social/nav/stats 行拥挤、输入框结构、移动端尺寸、Web 响应式宽度、elevation 一致性/层级
 - 命名与内容（2）：默认命名检查、占位文本检查
-- 组件（1）：组件属性绑定检查
+- 组件（2）：组件属性绑定检查、优先使用组件实例
 
 完整规则清单见 [docs/generated/lint-rules.md](docs/generated/lint-rules.md)。
 

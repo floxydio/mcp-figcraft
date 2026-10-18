@@ -2,18 +2,18 @@
 
 # Quality Engine — Lint Rules
 
-41 rules across 5 categories.
+44 rules across 5 categories.
 
 ## Summary
 
 | Category | Rules | Auto-fixable |
 | --- | ---: | ---: |
-| Token Compliance | 6 | 6 |
+| Token Compliance | 7 | 7 |
 | WCAG Accessibility | 5 | 3 |
-| Layout & Structure | 27 | 20 |
+| Layout & Structure | 28 | 21 |
 | Naming & Content | 2 | 0 |
-| Component | 1 | 0 |
-| **Total** | **41** | **29** |
+| Component | 2 | 0 |
+| **Total** | **44** | **31** |
 
 ## Token Compliance
 
@@ -22,9 +22,10 @@
 | `spec-color` | error | ✅ | Detect colors that don't match any design token — suggests the closest token to use. |
 | `spec-typography` | error | ✅ | Detect text layers with custom font settings that should use a typography token. |
 | `spec-border-radius` | error | ✅ | Detect corner radius values that don't match any radius token. |
-| `hardcoded-token` | heuristic | ✅ | Detect fill colors or corner radii that aren't linked to a spec source (library variable, local variable, or local style). |
+| `hardcoded-token` | heuristic | ✅ | Detect fill colors, stroke colors, or corner radii that aren't linked to a spec source (library variable, local variable, or local style). |
 | `no-text-style` | heuristic | ✅ | Detect text layers that don't use a shared text style. |
 | `foreign-style` | heuristic | ✅ | Detect styles (fill, text, effect) that belong to a different library than the one selected. |
+| `foreign-variable` | heuristic | ✅ | Detect variables (color, spacing, radius) bound from a different library than the one selected. |
 
 ## WCAG Accessibility
 
@@ -65,6 +66,7 @@
 | `stats-row-cramped` | heuristic | ✅ | Stats rows should have enough width for each metric card instead of squeezing them into an unreadable strip. |
 | `input-field-structure` | heuristic | ✅ | Input fields must be auto-layout frames with stroke, corner radius, padding, and a text child. |
 | `mobile-dimensions` | style | ✅ | Mobile screen frames should use standard dimensions: iOS 402×874, Android 412×915. |
+| `web-responsive-missing` | heuristic | ✅ | On web/tablet screens, full-width sections should fill their parent (Fill container) instead of using a fixed width. |
 | `elevation-consistency` | verbose | — | Sibling elements in the same container should share a consistent elevation strategy (all shadows or all flat). |
 | `elevation-hierarchy` | heuristic | — | Child elements should not have stronger shadows than their parent container. |
 
@@ -80,6 +82,7 @@
 | Rule | Severity | Fix | Description |
 | --- | --- | :---: | --- |
 | `component-bindings` | style | — | Detect component properties that are defined but not connected to any child layer. |
+| `prefer-component-instance` | heuristic | — | A frame that duplicates an available component should be an instance of that component. |
 
 ## AI Prevention Hints
 
@@ -91,9 +94,10 @@ These hints are injected into AI prompts to prevent violations during creation.
 | `spec-color` | Use fillVariableName or strokeVariableName to bind colors to design tokens instead of hardcoding hex values |
 | `spec-typography` | Apply a shared text style token instead of setting fontSize/fontFamily manually |
 | `spec-border-radius` | Bind corner radius to a radius token variable instead of hardcoding pixel values |
-| `hardcoded-token` | Bind fill colors with fillVariableName (or fillStyleName for local styles) and corner radii with variable references — never hardcode hex values or raw numbers |
+| `hardcoded-token` | Bind fill colors with fillVariableName (or fillStyleName for local styles), stroke colors with strokeVariableName, and corner radii with variable references — never hardcode hex values or raw numbers |
 | `no-text-style` | Apply a shared text style instead of setting fontSize/fontFamily directly |
 | `foreign-style` | Use fillVariableName/textStyleName from the selected library — avoid applying styles from other libraries |
+| `foreign-variable` | Use fillVariableName/strokeVariableName with variables from the selected library — avoid binding variables from other libraries |
 | `wcag-contrast` | Ensure text has at least 4.5:1 contrast ratio against its background (3:1 for large text ≥18px or ≥14px bold) |
 | `wcag-target-size` | Interactive elements (buttons, links, toggles) must be at least 24×24px for touch targets |
 | `wcag-text-size` | Text fontSize must be ≥10px on mobile screens, ≥12px on desktop/tablet/web |
@@ -114,10 +118,12 @@ These hints are injected into AI prompts to prevent violations during creation.
 | `section-spacing-collapse` | Section stacks (screen/body/content) need itemSpacing ≥12px to maintain visual rhythm |
 | `input-field-structure` | All input fields must be auto-layout frames with stroke (border), corner radius, internal padding, and placeholder text child — set layoutAlign: STRETCH |
 | `mobile-dimensions` | Mobile screen dimensions: iOS 402×874, Android 412×915 (no legacy sizes) |
+| `web-responsive-missing` | Web/tablet: sections that span the page width must use layoutAlign STRETCH (Fill container), not a hard-coded width |
 | `elevation-consistency` | Choose one elevation strategy per container: flat (borders only) or elevated (shadows). Do not mix. |
 | `elevation-hierarchy` | Child elements should not have stronger shadows than their parent container. |
 | `default-name` | Every frame must have a descriptive name reflecting its purpose (e.g. "Login Form", "Email Input") — no "Frame 1" defaults |
 | `placeholder-text` | Use realistic, contextually appropriate text. Never use "Lorem ipsum", "Title", "Button", or "Text goes here". |
+| `prefer-component-instance` | If a component with the same name exists (local or library), create type:"instance" instead of hand-building a frame |
 
 ## Severity Levels
 

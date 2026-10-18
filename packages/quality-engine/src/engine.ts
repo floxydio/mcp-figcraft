@@ -17,6 +17,7 @@ import { sectionSpacingCollapseRule } from './rules/layout/section-spacing-colla
 import { spacerFrameRule } from './rules/layout/spacer-frame.js';
 import { textOverflowRule } from './rules/layout/text-overflow.js';
 import { unboundedHugRule } from './rules/layout/unbounded-hug.js';
+import { webResponsiveMissingRule } from './rules/layout/web-responsive-missing.js';
 // Naming
 import { defaultNameRule } from './rules/naming/default-name.js';
 import { placeholderTextRule } from './rules/naming/placeholder-text.js';
@@ -41,6 +42,7 @@ import { inputFieldStructureRule } from './rules/structure/input-field-structure
 import { linkStandaloneStructureRule } from './rules/structure/link-standalone-structure.js';
 import { navOvercrowdedRule } from './rules/structure/nav-overcrowded.js';
 import { nestedInteractiveShellRule } from './rules/structure/nested-interactive-shell.js';
+import { preferComponentInstanceRule } from './rules/structure/prefer-component-instance.js';
 import { rootMisclassifiedInteractiveRule } from './rules/structure/root-misclassified-interactive.js';
 import { screenShellInvalidRule } from './rules/structure/screen-shell-invalid.js';
 import { socialRowCrampedRule } from './rules/structure/social-row-cramped.js';
@@ -109,6 +111,7 @@ const ALL_RULES: LintRule[] = [
   statsRowCrampedRule,
   inputFieldStructureRule,
   mobileDimensionsRule,
+  webResponsiveMissingRule,
   elevationConsistencyRule,
   elevationHierarchyRule,
   // ── Naming (always active) ──
@@ -116,6 +119,7 @@ const ALL_RULES: LintRule[] = [
   placeholderTextRule,
   // ── Component (always active) ──
   componentBindingsRule,
+  preferComponentInstanceRule,
 ];
 
 export interface LintOptions {

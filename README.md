@@ -21,11 +21,21 @@ Describe what you want in natural language, and FigCraft + Figma MCP make it hap
 - 🎨 **From creation to delivery, fully covered** — Create UI directly in Figma with 116 MCP tools. Build frames, components, variants, icons — check quality right after, fix issues on the spot
 - 🧠 **Opinion Engine** — auto-infers layout direction, sizing, token bindings, and catches parameter conflicts before they hit Figma. You describe *what*, it figures out *how*
 - 🔍 **Automated design audit** — token bindings, color contrast, spacing, component health — all checked in one pass · [Full guide →](docs/design-review.md)
-- 🔧 **Lint + fix in one step** — 40 rules covering token compliance, WCAG, layout structure — one command to batch-fix everything flagged
+- 🔧 **Lint + fix in one step** — 44 rules covering token compliance, WCAG, layout structure — one command to batch-fix everything flagged
 - 🔄 **Two-way token sync** — DTCG JSON ↔ Figma variables, Light/Dark multi-mode in one step. Changed tokens in code? Just sync
 - 🔀 **Dual mode for any team** — Library mode for Figma shared libraries, Spec mode for DTCG JSON — pick what fits your workflow
 - 📐 **Prototype → dev docs** — parse prototype interactions into Mermaid flow diagrams + interaction specs, no more manual handoff docs
 - 🛡️ **Harness Pipeline** — auto-verifies every creation, recovers from errors with actionable suggestions, and tracks quality debt across turns
+
+## What's New
+
+- 🧩 **Prefer component instances** — new `prefer-component-instance` lint rule flags hand-built frames that duplicate an existing component (local components on the current page; library components are not matched yet)
+- 📱 **Responsive web/tablet lint** — new `web-responsive-missing` rule (with auto-fix to Fill container) flags full-width sections pinned to a fixed width on desktop/tablet screens
+- 🐛 **More accurate spacing lint** — `section-spacing-collapse` no longer treats text color as a background, so collapsed sections are actually caught
+- 🧪 **Much larger quality benchmark** — 31 → 300+ tests: tablet, web, Android, dark mode, forms, empty states, overlays, plus must-fire negative scenarios that guard rule recall. Benchmarks now run at `verbose` severity so naming/empty/nesting rules are really evaluated
+- 🌐 **HTML import** — `import_html` converts static HTML, local `.html` files or simple URLs into editable layers
+- 🖼️ **Local image import** — `create_image_frame_from_local` / `fill_existing_image_from_local`
+- 📡 **Multi-port relay discovery** — `ping` finds the plugin on relay ports 3055-3060
 
 ## Quick Start
 
@@ -214,15 +224,15 @@ FigCraft creates UI directly in Figma — frames, text, SVG, components, variant
 - After creating UI, the Harness Pipeline auto-verifies quality; or run `lint_fix_all` manually
 - Use `get_design_context` to extract node trees with resolved tokens for design-to-code workflows
 
-## Lint Rules (40)
+## Lint Rules (44)
 
 Current lint coverage spans token compliance, WCAG accessibility, layout structure, screen-level quality, naming, and component health.
 
-- Token compliance (5): color, typography, radius, hardcoded token usage, missing text style
+- Token compliance (7): color, typography, radius, hardcoded token usage, missing text style, foreign style, foreign variable
 - WCAG accessibility (5): contrast, target size, text size, line height, non-text contrast
-- Layout & Structure (27): screen shell validation, misclassified interactive root, nested interactive shell, missing auto-layout, empty container, spacer frames, nesting depth, button variants (solid/outline/ghost/text/icon), standalone link, text overflow, form consistency, CTA width consistency, overflow parent, HUG/STRETCH paradox, section spacing collapse, screen bottom overflow, social/nav/stats row crowding, input field structure, mobile dimensions, elevation consistency, elevation hierarchy
+- Layout & Structure (28): screen shell validation, misclassified interactive root, nested interactive shell, missing auto-layout, empty container, spacer frames, nesting depth, button variants (solid/outline/ghost/text/icon), standalone link, text overflow, form consistency, CTA width consistency, overflow parent, HUG/STRETCH paradox, section spacing collapse, screen bottom overflow, social/nav/stats row crowding, input field structure, mobile dimensions, web responsive sizing, elevation consistency, elevation hierarchy
 - Naming & Content (2): default name detection, placeholder text detection
-- Component (1): component property binding checks
+- Component (2): component property binding checks, prefer component instance
 
 See [docs/generated/lint-rules.md](docs/generated/lint-rules.md) for the complete rule reference.
 
