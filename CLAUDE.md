@@ -323,6 +323,53 @@ figcraft and the official Figma MCP (Desktop or Remote) are **not replacements f
 
 figcraft is **not** a magic cloud solution. It is a better **local-plugin-first toolkit** — stronger at authoring, Opinion Engine, zero-config, and zero-plan-gating than the official Figma MCPs, but subject to the same local-connectivity trade-off as figma-desktop MCP.
 
+### Quick Start (from source)
+
+Repository: https://github.com/floxydio/mcp-figcraft (requires Node.js 20+)
+
+```bash
+# 1. Clone and build
+git clone https://github.com/floxydio/mcp-figcraft.git figcraft
+cd figcraft
+npm install
+npm run build            # or `npm run build:plugin` if you only need the Figma plugin
+```
+
+2. **Load the plugin** in Figma Desktop (not Figma in the browser, not FigJam), from inside a Design file:
+   `Plugins → Development → Import plugin from manifest…` → select `manifest.json` in the repo root.
+   Quick Actions alternative: `Ctrl + /` → "Import plugin from manifest".
+3. **Run the plugin**: `Plugins → Development → FigCraft`. Wait until the panel shows a channel ID and a connected status. Keep the panel open while the AI works — closing it drops the connection.
+4. **Register the MCP server** in the IDE (Claude Code: `.mcp.json` in the project):
+
+```json
+{
+  "mcpServers": {
+    "figcraft": {
+      "command": "npx",
+      "args": ["tsx", "packages/figcraft-design/src/index.ts"],
+      "cwd": "<absolute path to the cloned repo>"
+    }
+  }
+}
+```
+
+   Production alternative: `"command": "node", "args": ["dist/mcp-server/index.js"]` with the same `cwd`.
+   Claude Code ignores `autoApprove` in `.mcp.json` — configure auto-approval in `.claude/settings.json`.
+5. **Verify**: call the `ping` tool from the IDE. `connected: true` means ready. Then call `get_mode` and follow `_workflow` (design proposal → user confirmation → create).
+
+Troubleshooting:
+
+| Symptom | Fix |
+|---|---|
+| `ping` → "No Figma plugin found on any relay port (3055-3060)" | Plugin is not open or not connected. Open the file in Figma Desktop and re-run `Plugins → Development → FigCraft` |
+| `NO_PEER: No peer connected on channel ...` mid-session | Plugin panel was closed or the file was reloaded. Re-run the plugin, then `ping` again |
+| Port 3055 already in use | Relay auto-switches to 3056-3060; override with `FIGCRAFT_RELAY_PORT` / `FIGCRAFT_RELAY_URL` / `FIGCRAFT_CHANNEL` |
+| `export_image` → `response_too_large` (>49KB) | Export a smaller node or lower `scale` (e.g. 0.35); export per section instead of the whole page |
+| `create_frame` response truncated | The frame is usually still created — find it with `nodes(method:"list", query:"<name>")` before retrying |
+| Horizontal root frame turns VERTICAL after `verify_design` / `lint_fix_all` | Keep screen roots VERTICAL and put side-by-side columns inside a child frame named `Layout` (HORIZONTAL). Re-apply FILL sizing on the columns if they collapse |
+| `nodes(method:"update")` colors ignored | Use `fills` / `strokes` with `{ type: "SOLID", color: { r, g, b } }` (values 0–1), not hex strings |
+| Plugin-side orphaned-tool warnings in the MCP server log | Harmless — those are internal bridge handler names, exposed to the IDE through the `nodes` / `text` / `components` / `variables_ep` / `styles_ep` endpoints |
+
 ### User Usage (after npm package published)
 
 ```bash
